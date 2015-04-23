@@ -72,7 +72,7 @@
                        [KxGridMenuItem gridMenuItemWithTitle:@"Tumbrl"
                                                        image:[UIImage imageNamed:@"tumbrl"]
                                                       action:action],
-                       
+#if 0
                        [KxGridMenuItem gridMenuItemWithTitle:@"Twitter"
                                                        image:[UIImage imageNamed:@"twitter"]
                                                       action:action],
@@ -88,6 +88,7 @@
                        [KxGridMenuItem gridMenuItemWithTitle:@"Youtube"
                                                        image:[UIImage imageNamed:@"youtube"]
                                                       action:action],
+#endif
                        
 #if 0
                        [KxGridMenuItem gridMenuItemWithTitle:@"Twitter #"

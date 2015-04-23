@@ -170,9 +170,12 @@
     
     const CGSize contentSize = _collView.contentSize;
     if (contentSize.height) {
-        const CGFloat D = _collView.frame.size.height - contentSize.height;
-        if (D > 0) {
-            _collView.contentInset = UIEdgeInsetsMake(D * .5, 0, 0, 0);
+        const CGFloat dX = _collView.frame.size.width - contentSize.width;
+        const  CGFloat dY = _collView.frame.size.height - contentSize.height;
+        if (dY > 0 || dX > 0) {
+            _collView.contentInset = UIEdgeInsetsMake(roundf(MAX(0, dY) * .5),
+                                                      roundf(MAX(0, dX) * .5),
+                                                      0, 0);
         }
     }
 }
