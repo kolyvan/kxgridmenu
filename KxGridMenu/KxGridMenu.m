@@ -32,6 +32,7 @@
  */
 
 #import "KxGridMenu.h"
+#import <UIKit/UIGestureRecognizerSubclass.h>
 
 @interface KxGridMenuCollLayout : UICollectionViewLayout
 @property (readwrite, nonatomic) CGFloat lineSpacing;
@@ -390,8 +391,7 @@
         if (D > 0) {
             if (D > 160.f) {
                 
-                gesture.enabled = NO;
-                gesture.enabled = YES;
+                gesture.state = UIGestureRecognizerStateCancelled;
                 [self dismissViewControllerAnimated:YES completion:nil];
                 
             } else {
