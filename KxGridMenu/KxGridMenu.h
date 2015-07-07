@@ -72,6 +72,7 @@ typedef void(^KxGridMenuItemAction)(KxGridMenuItem * __nonnull item);
 @property (readwrite, nonatomic, strong, nullable) UIFont *itemFont;
 @property (readwrite, nonatomic, strong, nullable) UIFont *headlineFont;
 @property (readwrite, nonatomic) BOOL panGestureEnabled; // only for iphone
+@property (readwrite, nonatomic, copy, nullable) void(^didDisappearBlock)();
 
 + (nullable instancetype) gridMenuWithItems:(nonnull NSArray *)items;
 
@@ -82,6 +83,12 @@ typedef void(^KxGridMenuItemAction)(KxGridMenuItem * __nonnull item);
 - (void) presentFromViewController:(nonnull UIViewController *)controller
                              style:(KxGridMenuStyle)style
                      barButtonItem:(nullable UIBarButtonItem *)barButtonItem
+                          animated:(BOOL)animated
+                        completion:(nullable void (^)(void))completion __attribute__((deprecated));
+
+- (void) presentFromViewController:(nonnull UIViewController *)controller
+                             style:(KxGridMenuStyle)style
+                              from:(nullable id)from
                           animated:(BOOL)animated
                         completion:(nullable void (^)(void))completion;
 

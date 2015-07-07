@@ -229,6 +229,15 @@
     return size;
 }
 
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    if (_didDisappearBlock) {
+        _didDisappearBlock();
+    }
+}
+
 #pragma mark - public
 
 - (void) setPanGestureEnabled:(BOOL)panGestureEnabled
@@ -257,7 +266,7 @@
 {
     return[self presentFromViewController:controller
                                     style:KxGridMenuStyleAutomatic
-                            barButtonItem:nil
+                                     from:nil
                                  animated:YES
                                completion:nil];
 }
@@ -301,6 +310,77 @@
             
         } else {
         
+            // at center
+            const CGSize size = controller.view.bounds.size;
+            popover.sourceRect = (CGRect) { roundf(size.width * 0.5f), roundf(size.height * 0.5f), 1, 1 };
+            popover.permittedArrowDirections = 0;
+            
+            if (style == KxGridMenuStylePopoverCustom) {
+                popover.popoverBackgroundViewClass = [KxGridMenuPopoverBackView class];
+            }
+        }
+    }
+    
+    [controller presentViewController:self animated:animated completion:completion];
+}
+
+- (void) presentFromViewController:(UIViewController *)controller
+                             style:(KxGridMenuStyle)style
+                              from:(id)from
+                          animated:(BOOL)animated
+                        completion:(void (^)(void))completion
+{
+    if (style == KxGridMenuStyleAutomatic) {
+        
+        if (controller.view.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular) {
+            style = KxGridMenuStylePopoverCustom;
+            
+            if (from &&
+                controller.view.traitCollection.horizontalSizeClass != UIUserInterfaceSizeClassRegular)
+            {
+                from = nil;
+            }
+            
+        } else {
+            style = KxGridMenuStyleFullscreen;
+        }
+    }
+    
+    if (style == KxGridMenuStyleFullscreen) {
+        
+        self.modalPresentationCapturesStatusBarAppearance = YES;
+        self.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        //self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        
+    } else {
+        
+        self.modalPresentationCapturesStatusBarAppearance = NO;
+        self.modalPresentationStyle = UIModalPresentationPopover;
+        self.preferredContentSize = CGSizeZero;
+        
+        UIPopoverPresentationController *popover = self.popoverPresentationController;
+        popover.delegate = self;
+        popover.sourceView = controller.view;
+        popover.backgroundColor = [UIColor clearColor];
+        
+        if (from)
+        {
+            if ([from isKindOfClass:[UIBarButtonItem class]]) {
+                
+                popover.barButtonItem = from;
+                
+            } else if ([from isKindOfClass:[UIView class]]) {
+                
+                UIView *v = from;
+                popover.sourceRect = [controller.view convertRect:v.bounds fromView:v];
+                
+            } else if ([from isKindOfClass:[NSValue class]]) {
+                
+                popover.sourceRect = [(NSValue *)from CGRectValue];
+            }
+            
+        } else {
+            
             // at center
             const CGSize size = controller.view.bounds.size;
             popover.sourceRect = (CGRect) { roundf(size.width * 0.5f), roundf(size.height * 0.5f), 1, 1 };

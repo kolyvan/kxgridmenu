@@ -120,7 +120,7 @@
     
     [gridMenu presentFromViewController:self
                                   style:KxGridMenuStyleAutomatic
-                          barButtonItem:sender
+                                   from:sender
                                animated:YES
                              completion:nil];
 }
