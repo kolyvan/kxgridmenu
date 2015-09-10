@@ -155,11 +155,6 @@
     self.panGestureEnabled = _panGestureEnabled;
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [self dismissViewControllerAnimated:NO completion:nil];
-}
-
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return _blurEffectStyle == UIBlurEffectStyleDark ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
@@ -708,7 +703,7 @@
             const CGRect bounds = self.labelBounds;
             UILabel *v = [[UILabel alloc] initWithFrame:bounds];
             v.adjustsFontSizeToFitWidth = YES;
-            v.minimumScaleFactor = 0.5f;
+            v.minimumScaleFactor = 0.7;
             v.textColor = _foreColor;
             v.numberOfLines = 2;
             v.textAlignment = NSTextAlignmentCenter;
