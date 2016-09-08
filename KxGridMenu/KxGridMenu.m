@@ -61,6 +61,7 @@
 @interface KxGridMenu() <UICollectionViewDelegate, UICollectionViewDataSource,UIPopoverPresentationControllerDelegate>
 @property (readonly, nonatomic, strong) UICollectionView *collView;
 @property (readonly, nonatomic, strong) UILabel *headlineLabel;
+@property (readonly, nonatomic, strong) UIPageControl *pageControl;
 @end
 
 @implementation KxGridMenu {
@@ -137,17 +138,33 @@
         v.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
         v.backgroundColor = [UIColor clearColor];
         v.opaque = NO;
-        
+        if (_pageControlOn) {
+            v.showsVerticalScrollIndicator = NO;
+            v.showsHorizontalScrollIndicator = NO;
+        }
         v.backgroundView = [[UIView alloc] initWithFrame:frame];
         v.backgroundView.backgroundColor = [UIColor clearColor];
-        
         [v registerClass:[KxGridMenuCell class] forCellWithReuseIdentifier:@"Cell"];
-        
         v;
     });
     
     [backView.contentView addSubview:_collView];
-    
+
+    if (_pageControlOn) {
+        _pageControl = ({
+            UIColor *tintColor = self.foreColor ?: self.defaultColor;
+            const CGFloat H = 10.;
+            const CGRect frame = {0., size.height - H - 2., size.width, H};
+            UIPageControl *v = [[UIPageControl alloc] initWithFrame:frame];
+            v.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleTopMargin;
+            v.hidesForSinglePage = YES;
+            v.currentPageIndicatorTintColor = [tintColor colorWithAlphaComponent:0.8];
+            v.pageIndicatorTintColor = [tintColor colorWithAlphaComponent:0.4];
+            v;
+        });
+        [backView.contentView addSubview:_pageControl];
+    }
+
     _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTap:)];
     [_collView.backgroundView addGestureRecognizer:_tapGesture];
     
@@ -172,6 +189,15 @@
             _collView.contentInset = UIEdgeInsetsMake(roundf(MAX(0, dY) * .5),
                                                       roundf(MAX(0, dX) * .5),
                                                       0, 0);
+        }
+    }
+
+    if (_pageControl) {
+        const CGFloat numberOfPages = _collView.contentSize.width / _collView.bounds.size.width;
+        if (numberOfPages > 1.) {
+            _pageControl.numberOfPages = (NSInteger)ceil((double)numberOfPages);
+        } else {
+            _pageControl.numberOfPages = 1;
         }
     }
 }
@@ -541,6 +567,20 @@
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller traitCollection:(UITraitCollection *)traitCollection
 {
     return UIModalPresentationNone;
+}
+
+#pragma mark - UIScrollView Delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (_pageControl) {
+        if (scrollView.contentOffset.x > 0.) {
+            const CGFloat delta = scrollView.contentOffset.x / scrollView.bounds.size.width;
+            _pageControl.currentPage = (NSInteger)(delta + 1.);
+        } else {
+            _pageControl.currentPage = 0;
+        }
+    }
 }
 
 @end

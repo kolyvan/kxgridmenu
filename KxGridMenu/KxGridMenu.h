@@ -72,6 +72,7 @@ typedef void(^KxGridMenuItemAction)(KxGridMenuItem * __nonnull item);
 @property (readwrite, nonatomic, strong, nullable) UIFont *itemFont;
 @property (readwrite, nonatomic, strong, nullable) UIFont *headlineFont;
 @property (readwrite, nonatomic) BOOL panGestureEnabled; // only for iphone
+@property (readwrite, nonatomic) BOOL pageControlOn;
 @property (readwrite, nonatomic, copy, nullable) void(^didDisappearBlock)();
 
 + (nullable instancetype) gridMenuWithItems:(nonnull NSArray *)items;

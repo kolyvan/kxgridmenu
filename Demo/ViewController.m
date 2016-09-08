@@ -72,7 +72,7 @@
                        [KxGridMenuItem gridMenuItemWithTitle:@"Tumbrl"
                                                        image:[UIImage imageNamed:@"tumbrl"]
                                                       action:action],
-#if 0
+#if 1
                        [KxGridMenuItem gridMenuItemWithTitle:@"Twitter"
                                                        image:[UIImage imageNamed:@"twitter"]
                                                       action:action],
@@ -90,7 +90,7 @@
                                                       action:action],
 #endif
                        
-#if 0
+#if 1
                        [KxGridMenuItem gridMenuItemWithTitle:@"Twitter #"
                                                        image:[UIImage imageNamed:@"twitter"]
                                                       action:action],
@@ -114,8 +114,10 @@
     gridMenu.headline = @"The preferred network service.\nPlease select.";
     gridMenu.itemFont = [UIFont systemFontOfSize:15.f weight:UIFontWeightLight];
     gridMenu.foreColor = [UIColor colorWithWhite:0.15 alpha:1];
-    //gridMenu.foreColor = [UIColor colorWithWhite:0.85 alpha:1];
-    //gridMenu.blurEffectStyle = UIBlurEffectStyleDark;
+
+    gridMenu.pageControlOn = YES;
+    gridMenu.foreColor = [UIColor colorWithWhite:0.85 alpha:1];
+    gridMenu.blurEffectStyle = UIBlurEffectStyleDark;
     gridMenu.panGestureEnabled = YES;
     
     [gridMenu presentFromViewController:self
